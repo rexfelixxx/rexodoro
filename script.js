@@ -1,4 +1,4 @@
-let focus_time = 25 * 60;
+let focus_time = 25 *60;
 let break_time = 5 * 60;
 let time = focus_time;
 let remaining_time = time;
