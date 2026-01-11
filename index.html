@@ -7,6 +7,14 @@
   </head>
   <body>
     <button onclick="toggleTheme()" id="toggle-theme-id">Light</button>
+<button onclick="setPopUp()">Setting</button>
+    <div class="hide set-popup">
+      <label>Focus time:</label>
+      <input id="focus-time"type="number"/>
+      <label>Break time:</label>
+      <input id="break-time"type="number"/>
+      <button onclick="setTimer()">Set</button>
+    </div>
     <div id="app-container-id">
     <p id="mode-id">Focus</p>
     <p id="timer-id">25:00</p>

@@ -1,5 +1,5 @@
-let focus_time = 5;
-let break_time = 5;
+let focus_time = 25 * 60;
+let break_time = 5 * 60;
 let time = focus_time;
 let end_date = null;
 let start_date = null;
@@ -10,11 +10,13 @@ let isFocus = true;
 let timerElement = document.getElementById("timer-id");
 let modeElement = document.getElementById("mode-id");
 let toggleThemeElement = document.getElementById("toggle-theme-id");
-let bodyElement = document.querySelector("body")
+let bodyElement = document.querySelector("body");
+const focusTime = document.getElementById("focus-time");
+const breakTime = document.getElementById("break-time");
 
 function updateDisplay() {
   const minutes = String(Math.floor(remaining_time / 60)).padStart(2, "0");
-  const seconds = String(Math.round(remaining_time % 60)).padStart(2, "0");
+  const seconds = (remaining_time % 60).toFixed(0).padStart(2, "0");
 
   timerElement.innerText = `${minutes}:${seconds}`;
 }
@@ -72,3 +74,18 @@ function toggleTheme() {
   document.querySelector("body").classList.toggle("dark");
 }
 
+        let popup = document.querySelector(".set-popup");
+        
+        function setPopUp(){
+          popup.classList.toggle("hide")
+        }
+        
+function setTimer(){
+  if(!focusTime.value || !breakTime.value) {
+    alert("You need to fill both field");
+    return;
+  }
+  focus_time = focusTime.value * 60
+  break_time = breakTime.value * 60
+  reset();
+}
