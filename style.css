@@ -6,7 +6,7 @@
   --border-color: #d1d1d1;
 }
 
-body.dark{
+body.dark {
   --bg-color: #1e1e24;
   --text-color: #f0f0f5;
   --primary-color: #5d9cec;
@@ -14,7 +14,7 @@ body.dark{
   --border-color: #3f3f4a;
 }
 
-body{
+body {
   background-color: var(--bg-color);
   color: var(--text-color);
 }
@@ -64,7 +64,6 @@ button {
   margin: 10px;
   background-color: var(--primary-color);
   color: var(--text-color);
-
 }
 
 button:active {
@@ -73,13 +72,23 @@ button:active {
   color: var(--text-color);
 }
 
-.set-popup{
+.set-popup {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  padding: 100px;
+  background: var(--header-bg);
+  z-index: 1;
+  box-shadow: 2px 2px 1px black;
+  border-radius: 5px;
 }
 
-.hide{
+.hide {
   display: none;
 }
+
