@@ -6,6 +6,11 @@ let start_date = null;
 let remaining_time = null;
 let interval = null;
 let isFocus = true;
+let storage = {
+  isDarkThemeEnabled: localStorage.getItem("darkTheme"),
+};
+
+console.log(storage.isDarkThemeEnabled);
 
 let timerElement = document.getElementById("timer-id");
 let modeElement = document.getElementById("mode-id");
@@ -63,29 +68,34 @@ function reset() {
   stop();
 }
 
+if (storage.isDarkThemeEnabled == "true") {
+  toggleTheme()
+}
+
 function toggleTheme() {
-  console.log(bodyElement.classList.contains("dark"))
   if (!bodyElement.classList.contains("dark")) {
     toggleThemeElement.innerText = "Dark";
+    localStorage.setItem("darkTheme", "true");
   } else {
     toggleThemeElement.innerText = "Light";
+    localStorage.setItem("darkTheme", "false");
   }
-
   document.querySelector("body").classList.toggle("dark");
 }
 
-        let popup = document.querySelector(".set-popup");
-        
-        function setPopUp(){
-          popup.classList.toggle("hide")
-        }
-        
-function setTimer(){
-  if(!focusTime.value || !breakTime.value) {
+let popup = document.querySelector(".set-popup");
+
+function setPopUp() {
+  popup.classList.toggle("hide");
+}
+
+function setTimer() {
+  if (!focusTime.value || !breakTime.value) {
     alert("You need to fill both field");
     return;
   }
-  focus_time = focusTime.value * 60
-  break_time = breakTime.value * 60
+  focus_time = focusTime.value * 60;
+  break_time = breakTime.value * 60;
   reset();
 }
+
