@@ -8,6 +8,7 @@ let interval = null;
 let isFocus = true;
 let storage = {
   isDarkThemeEnabled: localStorage.getItem("darkTheme"),
+  endDate: localStorage.getItem("endDate")
 };
 
 console.log(storage.isDarkThemeEnabled);
@@ -26,16 +27,17 @@ function updateDisplay() {
   timerElement.innerText = `${minutes}:${seconds}`;
 }
 
+if(storage.endDate) start();
 function start() {
   if (interval) return;
 
   start_date = Date.now();
-  end_date = Date.now() + time * 1000;
-
+  end_date = storage.endDate || Date.now() + time * 1000;
+  localStorage.setItem("endDate", end_date);
   interval = setInterval(() => {
     updateDisplay();
-    const time_elapsed = (Date.now() - start_date) / 1000;
-    remaining_time = time - time_elapsed;
+    const time_elapsed = (end_date - Date.now()) / 1000;
+    remaining_time = time_elapsed;
 
     if (remaining_time <= 0) {
       start_date = Date.now();
@@ -60,6 +62,8 @@ function stop() {
 }
 
 function reset() {
+  localStorage.removeItem("endDate");
+  storage.endDate = null;
   time = focus_time;
   remaining_time = time;
   modeElement.innerText = "Focus";
