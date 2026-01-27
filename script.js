@@ -1,14 +1,9 @@
-// TODO: Tidying up this buffy chunky lines of code 
-/**
- * Modern Pomodoro Timer
- * Refactored & Upgraded
- */
-
+// TODO: notify the user when focus / break time end in capacitor
 class PomodoroTimer {
   constructor() {
     // Konfigurasi Default (dalam detik)
-    this.defaultFocusTime = 25 * 60;
-    this.defaultBreakTime = 5 * 60;
+    this.defaultFocusTime = 5;
+    this.defaultBreakTime = 5;
 
     // State Awal
     this.currentTime = this.defaultFocusTime;
@@ -36,6 +31,7 @@ class PomodoroTimer {
     // Cek apakah ada timer berjalan yang tersimpan
     if (localStorage.getItem("endDate")) {
       this.resumeFromStorage();
+      this.resumeModeFromStorage();
     }
   }
 
@@ -93,7 +89,8 @@ class PomodoroTimer {
   switchMode() {
     // Ganti Mode (Focus <-> Break)
     this.isFocusMode = !this.isFocusMode;
-    
+    localStorage.setItem("isFocusMode", this.isFocusMode);
+
     if (this.isFocusMode) {
       this.currentTime = this.defaultFocusTime;
       this.elements.mode.innerText = "Focus";
@@ -106,7 +103,7 @@ class PomodoroTimer {
     this.remainingTime = this.currentTime;
     this.endDate = Date.now() + this.remainingTime * 1000;
     localStorage.setItem("endDate", this.endDate);
-    
+
     // Opsional: Bunyikan alarm di sini
     this.updateDisplay();
   }
@@ -117,7 +114,7 @@ class PomodoroTimer {
       this.endDate = parseInt(savedEndDate);
       // Hitung sisa waktu saat ini
       const distance = this.endDate - Date.now();
-      
+
       if (distance > 0) {
         this.remainingTime = distance / 1000;
         this.start(); // Lanjutkan timer otomatis
@@ -140,7 +137,7 @@ class PomodoroTimer {
 
     this.defaultFocusTime = focusVal * 60;
     this.defaultBreakTime = breakVal * 60;
-    
+
     this.togglePopup(); // Tutup popup
     this.reset(); // Reset dengan waktu baru
   }
@@ -150,14 +147,14 @@ class PomodoroTimer {
   updateDisplay() {
     // Mencegah angka negatif
     let time = Math.max(0, this.remainingTime);
-    
+
     const minutes = String(Math.floor(time / 60)).padStart(2, "0");
     const seconds = String(Math.floor(time % 60)).padStart(2, "0");
-    
+
     this.elements.timer.innerText = `${minutes}:${seconds}`;
-    
+
     // Update Title Browser (Fitur tambahan: biar kelihatan di tab)
-    document.title = `${minutes}:${seconds} - ${this.isFocusMode ? 'Focus' : 'Break'}`;
+    document.title = `${minutes}:${seconds} - ${this.isFocusMode ? "Focus" : "Break"}`;
   }
 
   togglePopup() {
@@ -179,15 +176,15 @@ class PomodoroTimer {
       this.elements.body.classList.add("dark");
       this.elements.toggleThemeBtn.innerText = "Light"; // Tombol menunjukkan aksi selanjutnya (ke Light)
     } else {
-        this.elements.toggleThemeBtn.innerText = "Dark";
+      this.elements.toggleThemeBtn.innerText = "Dark";
     }
   }
 
   // Setup Event Listeners agar HTML lebih bersih
   initEventListeners() {
-    // Kita asumsikan tombol di HTML memanggil fungsi global, 
+    // Kita asumsikan tombol di HTML memanggil fungsi global,
     // tapi lebih baik menggunakan addEventListener jika kamu punya ID untuk tombol start/stop/reset.
-    
+
     // Untuk kompatibilitas dengan HTML lamamu, kita expose method ke window
     // (Agar tombol onclick="start()" di HTML tetap jalan)
     window.start = () => this.start();
@@ -197,7 +194,18 @@ class PomodoroTimer {
     window.setPopUp = () => this.togglePopup();
     window.setTimer = () => this.setCustomTime();
   }
+
+  resumeModeFromStorage() {
+    const isFocusMode = localStorage.getItem("isFocusMode");
+    if (isFocusMode == "false") {
+      this.isFocusMode = true;
+    } else {
+      this.isFocusMode = false;
+    }
+    this.switchMode();
+  }
 }
 
 // Jalankan Aplikasi
 const app = new PomodoroTimer();
+
